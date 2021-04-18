@@ -1,0 +1,25 @@
+- hosts: localhost
+  tasks:
+  - name: "Installing apache webserver "
+    package:
+         name: "httpd"
+         state: present
+  - name: "Copying the httpd files"
+    copy:
+      src: "trial.html"
+      dest: "/var/www/html"
+
+  - name: "Creating template"
+    template:
+       dest: "/etc/httpd/conf.d/handler.conf"
+       src: "handler.conf"
+    notify: 
+    - webservice
+   
+  handlers:
+      - name: "Web service"
+        service:
+          name: "httpd"
+          state: restarted
+
+
